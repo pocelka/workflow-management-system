@@ -40,5 +40,23 @@ create or replace package body wms_app as
    end create_app;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+   function get_app_id(
+         p_alias in wms_application.alias%type) return wms_application.id%type is
+
+      l_app_id          wms_application.id%type;
+
+   begin
+
+      select id
+      into l_app_id
+      from wms_application
+      where 1 = 1
+      and alias = p_alias;
+
+      return l_app_id;
+
+   end get_app_id;
+   --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 end wms_app;
 /
