@@ -12,5 +12,3 @@ wms_application_parameter
   application_id
   parameter_id
   parameter_value
-
-

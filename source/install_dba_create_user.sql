@@ -14,7 +14,7 @@ prompt Workflow Management System - create schema script.
 prompt You will be prompted for a username, tablespace, temporary tablespace and password.
 prompt ====
 prompt
-prompt 
+prompt
 
 
 define wms_owner=wms
@@ -32,14 +32,14 @@ create user &wms_owner identified by &PASSWD default tablespace &wms_tablespace 
 
 alter user &wms_owner quota unlimited on &wms_tablespace;
 
-grant 
-   create session, 
-   create sequence, 
-   create procedure, 
-   create type, 
-   create table, 
-   create view, 
-   create synonym, 
+grant
+   create session,
+   create sequence,
+   create procedure,
+   create type,
+   create table,
+   create view,
+   create synonym,
    debug connect session,
    alter session,
    create job,
