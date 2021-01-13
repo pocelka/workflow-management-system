@@ -7,7 +7,7 @@ create or replace package body wms_error as
 
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRIVATE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    /*!
-   Is used to parse package specification to get all framework related messages to global variable.
+   Is used to parse package specification to get all framework related messages into memory for faster access.
    */
    procedure init_error_messages is
 

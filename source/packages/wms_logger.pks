@@ -1,14 +1,25 @@
 create or replace package wms_logger authid current_user is
-
    /**
    # Logging
 
    This package provides utilities and APIs to for logging purposes.
+
+   This package can be used by applications run through this framework.
+
+   The main features of this instrumentalization are:
+
+   - Multiple levels of errors (DEBUG, INFO, WARNING, ERROR, CRITICAL). Each level has assigned priority. Debug is the
+     lowest. Framework will log messages set to the same or bigger level. This means that when user will setup log level
+     to DEBUG only debug messages will be logged even if info messages are called. When log level is set-up to INFO,
+     both info and debug messages will be logged.
+   - Handling of logging input parameters with simple API.
+
    **/
 
+   -- used to store information about parameters to be logged into log table
    type parameter_rec is record(
-      par_name          varchar2(255),
-      par_value         varchar2(4000));
+      par_name          varchar2(255),                            -- parameter name
+      par_value         varchar2(4000));                          -- parameter value
 
    type parameters_nt is table of parameter_rec index by binary_integer;
 
@@ -22,7 +33,8 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in varchar2);                          --Parameter value
    /**
-   Adds text parameter into the list of parameter values.
+   This procedure will add text parameter into the list of parameters. This information can be than inserted into log
+   table.
    **/
 
    procedure add_parameter(
@@ -30,7 +42,8 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in number);                            --Parameter value
    /**
-   Adds number parameter into the list of parameter values.
+   This procedure will add number parameter into the list of parameters. This information can be than inserted into log
+   table.
    **/
 
    procedure add_parameter(
@@ -38,7 +51,8 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in date);                              --Parameter value
    /**
-   Adds date parameter into the list of parameter values.
+   This procedure will add date parameter into the list of parameters. This information can be than inserted into log
+   table.
    **/
 
    procedure add_parameter(
@@ -46,7 +60,8 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in timestamp);                         --Parameter value
    /**
-   Adds timestamp parameter into the list of parameter values.
+   This procedure will add timestamp parameter into the list of parameters. This information can be than inserted into
+   log table.
    **/
 
    procedure add_parameter(
@@ -54,7 +69,8 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in timestamp with time zone);          --Parameter value
    /**
-   Adds timestamp with time zone parameter into the list of parameter values.
+   This procedure will add timestamp with time zone parameter into the list of parameters. This information can be than
+   inserted into log table.
    **/
 
    procedure add_parameter(
@@ -62,7 +78,8 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in timestamp with local time zone);    --Parameter value
    /**
-   Adds timestamp with local time zone parameter into the list of parameter values.
+   This procedure will add timestamp with local time zone parameter into the list of parameters. This information can be
+   than inserted into log table.
    **/
 
    procedure add_parameter(
@@ -70,15 +87,17 @@ create or replace package wms_logger authid current_user is
       p_name               in varchar2,                           --Parameter name
       p_val                in boolean);                           --Parameter value
    /**
-   Adds boolean parameter into the list of parameter values.
+   This procedure will add boolean parameter into the list of parameters. This information can be than inserted into log
+   table.
    **/
 
    procedure setup_logging(
       p_app_id          in wms_log.application_id%type,                 --Application ID
-      p_proc_id         in wms_log.procedure_id%type,                   --Proceudre ID
+      p_proc_id         in wms_log.procedure_id%type,                   --Procedure ID
       p_level_name      in varchar2);                                   --Text representation for log level
    /**
-   Used to setup global logging parameters. In order to use logging framework
+   Used to setup global logging parameters. In order to use logging framework user should always call this procedure at
+   the beggining.
    **/
 
    procedure logging_attributes(
