@@ -7,20 +7,24 @@ create or replace package body wms_logger as
 
    type t_log_levels is table of pls_integer index by varchar2(30);
 
+   -- record to store information about logging setup
    type t_log_setup_rec is record(
-      application_id                wms_log.application_id%type,
-      procedure_id                  wms_log.procedure_id%type,
-      log_level                     wms_log.log_level%type,
-      log_parameters                boolean                    default false,
-      session_info                  boolean                    default false);
+      application_id                wms_log.application_id%type,                 --Application ID
+      procedure_id                  wms_log.procedure_id%type,                   --Procedure ID (user defined)
+      log_level                     wms_log.log_level%type,                      --Log level to be used
+      log_parameters                boolean                    default false,    --Indication if user wants to log input parameters
+      session_info                  boolean                    default false);   --Indication if user wants to log additional session information
 
    g_log_setup                      t_log_setup_rec;
    g_log_levels                     t_log_levels;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRIVATE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   /*!
+   This function is used to determine numeric level for provided text level
+   */
    function get_log_level(
-      p_level_name      in varchar2) return wms_log.log_level%type is
+      p_level_name      in varchar2) return wms_log.log_level%type is      --Log level name in text format; i.e. INFO
 
    begin
 
@@ -29,8 +33,11 @@ create or replace package body wms_logger as
    end get_log_level;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+   /*!
+   This function is used construct information for user defined attributes in pretty format if their logging is requrested.
+   */
    function get_parameters(
-      p_parameters      in parameters_nt) return clob is
+      p_parameters      in parameters_nt) return clob is                --List of parameters to be logged
 
       l_return             clob;
    begin
@@ -62,7 +69,7 @@ create or replace package body wms_logger as
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    /*!
-   Is used to get several session level informations
+   Is used to get several session level informations. This can usefull for debugging purposes.
    */
    function get_session_info return varchar2 is
 
@@ -84,14 +91,16 @@ create or replace package body wms_logger as
 
    end get_session_info;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+   /*!
+   Internal wrapper which will insert message into log table
+   */
    procedure log_internal(
-      p_log_text           in wms_log.log_text%type,                       --Message to be logged
-      p_log_type           in wms_log.log_type%type,                       --Log Type
-      p_log_level          in wms_log.log_level%type,                      --Log Level
-      p_extra              in wms_log.extra%type         default null,     --Extra information to be logged; i.e. information about parameters
-      p_call_stack         in wms_log.call_stack%type    default null,     --Call Stack Information
-      p_error_stack        in wms_log.error_stack%type   default null,     --Error Stack Information
+      p_log_text           in wms_log.log_text%type,                                   --Message to be logged
+      p_log_type           in wms_log.log_type%type,                                   --Log Type
+      p_log_level          in wms_log.log_level%type,                                  --Log Level
+      p_extra              in wms_log.extra%type         default null,                 --Extra information to be logged; i.e. information about parameters
+      p_call_stack         in wms_log.call_stack%type    default null,                 --Call Stack Information
+      p_error_stack        in wms_log.error_stack%type   default null,                 --Error Stack Information
       p_parameters         in parameters_nt              default c_empty_param_nt) is  --Parameters passed from application
       pragma autonomous_transaction;
 
