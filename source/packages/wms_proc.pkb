@@ -43,13 +43,50 @@ create or replace package body wms_proc as
    end generate_program_name;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+   /*!
+   Procedure is used to create LOV for procedure groups
+   */
+   function create_procedure_group(
+      p_group_name         in wms_procedure_group.name%type) return wms_procedure_group.id%type is
+
+      c_proc_name             constant wms_const.proc_name := c_scope || 'create_procedure_group';
+
+      l_params                         logger.tab_param;
+
+      l_group_id                       wms_procedure_group.id%type;
+
+   begin
+
+      logger.append_param(l_params, 'p_group_name', p_group_name);
+
+      select max(id)
+      into l_group_id
+      from wms_procedure_group
+      where 1 = 1
+      and name = p_group_name;
+
+      if (l_group_id is null) then
+         insert into wms_procedure_group(
+            id,
+            name)
+         values (
+            wms_procedure_group_seq.nextval,
+            p_group_name)
+         returning id into l_group_id;
+      end if;
+
+      return l_group_id;
+
+   end create_procedure_group;
+   --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PUBLIC ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    procedure create_procedure(
       p_app_alias          in wms_application.alias%type,
       p_statement          in wms_procedure.statement%type,
       p_proc_name          in wms_procedure.procedure_name%type,
-      p_proc_group         in wms_procedure.procedure_group%type,
+      p_proc_group         in wms_procedure_group.name%type,
       p_enabled            in wms_procedure.enabled%type) is
 
       c_proc_name             constant wms_const.proc_name := c_scope || 'create_procedure';
@@ -57,6 +94,7 @@ create or replace package body wms_proc as
       l_params                         logger.tab_param;
       l_app_id                         wms_application.id%type;
       l_generated_name                 wms_procedure.generated_name%type;
+      l_group_id                       wms_procedure_group.id%type;
 
    begin
 
@@ -69,11 +107,15 @@ create or replace package body wms_proc as
       l_app_id := wms_app.get_app_id(p_alias => p_app_alias);
       l_generated_name := generate_program_name;
 
+      if (p_proc_group is not null) then
+         l_group_id := create_procedure_group(p_group_name => p_proc_group);
+      end if;
+
       insert into wms_procedure(
          id,
          application_id,
          procedure_name,
-         procedure_group,
+         procedure_group_id,
          statement,
          enabled,
          generated_name
@@ -82,7 +124,7 @@ create or replace package body wms_proc as
          wms_procedure_seq.nextval,
          l_app_id,
          p_proc_name,
-         p_proc_group,
+         l_group_id,
          p_statement,
          p_enabled,
          l_generated_name

@@ -19,19 +19,19 @@ create or replace package wms_error authid definer is
    --this spec and initialize global variable with all exceptions defined in package specification. I assume that if
    --anybody will modify this spec in future he will use the same standards for defining constants.
    --User can define substitution variables which will be replaced during processing raise by defining [1] or [2] in message text.
-   wms_default_exception exception;
-   err_wms_default_exception constant number := -20000;
-   txt_wms_default_exception constant exception_message_text := '"[1]"';
+   wms_default_exception      exception;
+   err_wms_default_exception  constant number := -20000;
+   txt_wms_default_exception  constant exception_message_text := '"[1]"';
    pragma exception_init(wms_default_exception, -20000);
 
-   wms_app_already_exists exception;
+   wms_app_already_exists     exception;
    err_wms_app_already_exists constant number := -20001;
    txt_wms_app_already_exists constant exception_message_text := '"Application with alias ''[1]'' is already configured in the framework."';
    pragma exception_init(wms_app_already_exists, -20001);
 
-   wms_app_not_found exception;
-   err_wms_app_not_found constant number := -20002;
-   txt_wms_app_not_found constant exception_message_text := '"Application with alias ''[1]'' does not exists."';
+   wms_app_not_found          exception;
+   err_wms_app_not_found      constant number := -20002;
+   txt_wms_app_not_found      constant exception_message_text := '"Application with alias ''[1]'' does not exist."';
    pragma exception_init(wms_app_not_found, -20002);
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
