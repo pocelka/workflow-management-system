@@ -32,7 +32,7 @@ create or replace package wms_error authid definer is
    wms_app_not_found exception;
    err_wms_app_not_found constant number := -20002;
    txt_wms_app_not_found constant exception_message_text := '"Application with alias [1] does not exists."';
-   pragma exception_init(wms_app_already_exists, -20002);
+   pragma exception_init(wms_app_not_found, -20002);
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    procedure raise_error(
