@@ -54,10 +54,17 @@ create or replace package body wms_proc as
 
       c_proc_name             constant wms_const.proc_name := c_scope || 'create_procedure';
 
+      l_params                         logger.tab_param;
       l_app_id                         wms_application.id%type;
       l_generated_name                 wms_procedure.generated_name%type;
 
    begin
+
+      logger.append_param(l_params, 'p_app_alias', p_app_alias);
+      logger.append_param(l_params, 'p_statement', p_statement);
+      logger.append_param(l_params, 'p_proc_name', p_proc_name);
+      logger.append_param(l_params, 'p_proc_group', p_proc_group);
+      logger.append_param(l_params, 'p_enabled', p_enabled);
 
       l_app_id := wms_app.get_app_id(p_alias => p_app_alias);
       l_generated_name := generate_program_name;
@@ -86,12 +93,14 @@ create or replace package body wms_proc as
       exception
          when no_data_found then
             wms_error.raise_error(p_err_code => wms_error.err_wms_app_not_found,
-                                  p_variable1 => p_app_alias);
+                                  p_variable1 => p_app_alias,
+                                  p_scope => c_proc_name);
 
          when others then
-            wms_error.raise_error(p_err_msg => sqlerrm);
+            wms_error.raise_error(p_err_msg => sqlerrm,
+                                  p_scope => c_proc_name,
+                                  p_params => l_params);
    end create_procedure;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 end wms_proc;
-/

@@ -7,7 +7,7 @@ create or replace package body wms_error as
 
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PRIVATE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    /*!
-   Is used to parse package specification to get all framework related messages into memory for faster access.
+   Is used to parse package specification to get all framework related messages to global variable.
    */
    procedure init_error_messages is
 
@@ -46,17 +46,14 @@ create or replace package body wms_error as
 
    procedure raise_error(
       p_err_code           in pls_integer,
-      p_err_msg_inputs     in t_exception_params   default null) is
+      p_err_msg_inputs     in t_exception_params      default null,
+      p_scope              in logger_logs.scope%type  default null,
+      p_params             in logger.tab_param        default logger.gc_empty_tab_param) is
 
       l_message               exception_message_text;
       l_sql                   varchar(4000);
 
    begin
-
-      --setup minimal loggig level
-      wms_logger.setup_logging(p_app_id => wms_const.c_app_id,
-                               p_proc_id => 'n/a',
-                               p_level_name => 'ERROR');
 
       --In case error messages were not yet initialized, we want to initiaze them.
       if (g_exceptions.count = 0) THEN
@@ -82,9 +79,10 @@ create or replace package body wms_error as
          end loop;
       end if;
 
-      wms_logger.log_msg(p_type => 'ERROR',
-                         p_log_text => l_message,
-                         p_log_type => wms_const.c_log_type_fmw);
+      logger.log_error(p_text => l_message,
+                       p_scope => p_scope,
+                       p_extra => null,
+                       p_params => p_params);
 
       --raise error
       if (p_err_code between -20999 and -20000) then
@@ -102,25 +100,35 @@ create or replace package body wms_error as
 
    procedure raise_error(
       p_err_code        in pls_integer,
-      p_variable1       in varchar2) is
+      p_variable1       in varchar2,
+      p_scope           in logger_logs.scope%type,
+      p_params          in logger.tab_param) is
    begin
       raise_error(p_err_code => p_err_code,
-                  p_err_msg_inputs => t_exception_params(p_variable1));
+                  p_err_msg_inputs => t_exception_params(p_variable1),
+                  p_scope => p_scope,
+                  p_params => p_params);
    end raise_error;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    procedure raise_error(
       p_err_code        in pls_integer,
       p_variable1       in varchar2,
-      p_variable2       in varchar2) is
+      p_variable2       in varchar2,
+      p_scope           in logger_logs.scope%type,
+      p_params          in logger.tab_param) is
    begin
       raise_error(p_err_code => p_err_code,
-                  p_err_msg_inputs => t_exception_params(p_variable1, p_variable2));
+                  p_err_msg_inputs => t_exception_params(p_variable1, p_variable2),
+                  p_scope => p_scope,
+                  p_params => p_params);
    end raise_error;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
    procedure raise_error(
-      p_err_msg         in varchar2) is
+      p_err_msg         in varchar2,
+      p_scope           in logger_logs.scope%type,
+      p_params          in logger.tab_param) is
 
       l_error_code         pls_integer;
       l_error_message      exception_message_text;
@@ -130,7 +138,9 @@ create or replace package body wms_error as
       l_error_message := substr(p_err_msg, instr(p_err_msg,':') + 2);
 
       raise_error(p_err_code => l_error_code,
-                  p_err_msg_inputs => t_exception_params(l_error_message));
+                  p_err_msg_inputs => t_exception_params(l_error_message),
+                  p_scope => p_scope,
+                  p_params => p_params);
    end raise_error;
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
