@@ -14,7 +14,7 @@ create or replace package wms_app authid current_user is
    **/
 
    function get_app_id(
-         p_alias in wms_application.alias%type) return wms_application.id%type;     --Application alias
+      p_alias in wms_application.alias%type) return wms_application.id%type;     --Application alias
    /**
    Used to determine application ID based on the specified alias.
    **/
