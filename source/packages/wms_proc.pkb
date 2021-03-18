@@ -50,14 +50,9 @@ create or replace package body wms_proc as
       p_group_name         in wms_procedure_group.name%type) return wms_procedure_group.id%type is
 
       c_proc_name             constant wms_const.proc_name := c_scope || 'create_procedure_group';
-
-      l_params                         logger.tab_param;
-
       l_group_id                       wms_procedure_group.id%type;
 
    begin
-
-      logger.append_param(l_params, 'p_group_name', p_group_name);
 
       select max(id)
       into l_group_id
