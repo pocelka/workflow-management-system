@@ -4,7 +4,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: master
+  rev: v4.3.0
   hooks:
     - id: trailing-whitespace
     - id: end-of-file-fixer
@@ -12,13 +12,13 @@ repos:
     - id: check-added-large-files
     - id: fix-byte-order-marker
     - id: check-merge-conflict
-    - id: no-commit-to-branch
+#    - id: no-commit-to-branch
 - repo: https://github.com/jumanjihouse/pre-commit-hooks
-  rev: master  # or specific git tag
+  rev: 3.0.0  # or specific git tag
   hooks:
     - id: shellcheck
 - repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: master
+  rev: v1.3.1
   hooks:
   - id: forbid-crlf
   - id: forbid-tabs
