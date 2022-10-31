@@ -20,7 +20,7 @@ cache
 
 comment on table wms_procedure_group is 'Contains list of groups which can be assigned to procedures';
 comment on column wms_procedure_group.id is 'Surrogate key for this table.';
-comment on column wms_procedure_group.name is 'Name of the group. I.e. general, validation, transformation etc.';
+comment on column wms_procedure_group.name is 'Name of the group; i.e. general, validation, transformation etc.';
 
 alter table wms_procedure_group add (
    constraint wms_procedure_group__pk

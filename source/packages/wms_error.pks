@@ -2,7 +2,7 @@ create or replace package wms_error authid definer is
    /**
    # Error Handling
 
-   This package provides utilities to handle errors through the framework. It is also a single point of referrence for
+   This package provides utilities to handle errors through the framework. It is also a single point of reference for
    exception messages raised through framework.
 
    Additionally provides an API for raising errors in user defined applications.
@@ -44,7 +44,7 @@ create or replace package wms_error authid definer is
    procedure raise_error(
       p_err_code           in pls_integer,                                                --Error code to be raise; user defined or oracle internal code
       p_err_msg_inputs     in t_exception_params      default null,                       --List of substitution variables for the message text
-      p_scope              in logger_logs.scope%type  default null,                       --Procedure in which error occured
+      p_scope              in logger_logs.scope%type  default null,                       --Procedure in which error occurred
       p_params             in logger.tab_param        default logger.gc_empty_tab_param); --Parameters from procedure to be logged
    /**
    Procedure is used to call logging procedure to insert error message into log table. If error code is not defined in
@@ -54,7 +54,7 @@ create or replace package wms_error authid definer is
    procedure raise_error(
       p_err_code        in pls_integer,                                                   --Error code to be raise; user defined or oracle internal code
       p_variable1       in varchar2,                                                      --Substitution variable 1 for message text
-      p_scope           in logger_logs.scope%type     default null,                       --Procedure in which error occured
+      p_scope           in logger_logs.scope%type     default null,                       --Procedure in which error occurred
       p_params          in logger.tab_param           default logger.gc_empty_tab_param); --Parameters from procedure to be logged
    /**
    This is a helper procedure. User will send error code and substitution variable and procedure will call main procedure
@@ -65,7 +65,7 @@ create or replace package wms_error authid definer is
       p_err_code        in pls_integer,                                                   --Error code to be raise; user defined or oracle internal code
       p_variable1       in varchar2,                                                      --Substitution variable 1 for message text
       p_variable2       in varchar2,                                                      --Substitution variable 2 for message text
-      p_scope           in logger_logs.scope%type     default null,                       --Procedure in which error occured
+      p_scope           in logger_logs.scope%type     default null,                       --Procedure in which error occurred
       p_params          in logger.tab_param           default logger.gc_empty_tab_param); --Parameters from procedure to be logged
    /**
    This is a helper procedure. User will send error code and substitution variables and procedure will call main procedure
@@ -74,7 +74,7 @@ create or replace package wms_error authid definer is
 
    procedure raise_error(
       p_err_msg         in varchar2,                                                      --Error message containing ORA- prefix
-      p_scope           in logger_logs.scope%type     default null,                       --Procedure in which error occured
+      p_scope           in logger_logs.scope%type     default null,                       --Procedure in which error occurred
       p_params          in logger.tab_param           default logger.gc_empty_tab_param); --Parameters from procedure to be logged
    /**
    This is a helper procedure should be used when user wants to send just SQLERRM. Procedure will parse this message and

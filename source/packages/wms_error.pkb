@@ -55,7 +55,7 @@ create or replace package body wms_error as
 
    begin
 
-      --In case error messages were not yet initialized, we want to initiaze them.
+      --In case error messages were not yet initialized, we want to initialize them.
       if (g_exceptions.count = 0) THEN
          init_error_messages;
       end if;

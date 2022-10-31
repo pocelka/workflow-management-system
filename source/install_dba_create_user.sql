@@ -20,7 +20,7 @@ prompt
 define wms_owner=wms
 accept wms_owner char default &wms_owner prompt 'Name of the WMS schema to create       [&wms_owner] :'
 
-define wms_tablespace=ts_wms
+define wms_tablespace=users
 accept wms_tablespace char default &wms_tablespace prompt 'Tablespace for the WMS           [&wms_tablespace] :'
 
 define temp_tablespace=TEMP

@@ -1,7 +1,7 @@
 create or replace package wms_const authid current_user is
 
    /**
-   Global constants used accross the framework
+   Global constants used across the framework
    **/
 
    --~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

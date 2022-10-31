@@ -54,6 +54,7 @@ create or replace package body wms_proc as
 
    begin
 
+      -- TODO: change to begin end block with dup_val_on_index exception block
       select max(id)
       into l_group_id
       from wms_procedure_group

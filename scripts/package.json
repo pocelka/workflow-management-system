@@ -4,6 +4,6 @@
         "build:all_docs": "npx ploc --in '../source/*/*.*(pks|tps)' --out '../docs/{file}.md' -t 5"
     },
     "dependencies": {
-        "ploc": "^0.6.2"
+        "ploc": "^0.8.0"
     }
 }

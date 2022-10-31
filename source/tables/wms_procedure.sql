@@ -27,8 +27,8 @@ comment on table wms_procedure is 'Contains list of procedures for given applica
 comment on column wms_procedure.id is 'Surrogate key for this table.';
 comment on column wms_procedure.application_id is 'FK to wms_application.';
 comment on column wms_procedure.procedure_name is 'User defined short name for procedure.';
-comment on column wms_procedure.procedure_group_id is 'Group to which procedure belongs. I.e. general, validation, transformation etc. .';
-comment on column wms_procedure.statement is 'Statement to be exececuted in WMS.';
+comment on column wms_procedure.procedure_group_id is 'Group to which procedure belongs; i.e. general, validation, transformation etc.';
+comment on column wms_procedure.statement is 'Statement to be executed by WMS.';
 comment on column wms_procedure.enabled is 'Indicates whether procedure is enabled / visible.';
 comment on column wms_procedure.generated_name is 'Generated unique name for procedure.';
 
